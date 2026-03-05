@@ -6,6 +6,7 @@ class AuthPage(BasePage):
     SEND_CODE_BUTTON = (By.XPATH, "//button[contains(text(), 'Получить код')]")
     CODE_INPUT = (By.NAME, "code")
     SUBMIT_BUTTON = (By.XPATH, "//button[contains(text(), 'Войти')]")
+    ERROR_MESSAGE = (By.CLASS_NAME, "error-message")  
 
 
     def enter_phone(self, phone_number: str):

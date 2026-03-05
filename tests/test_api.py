@@ -1,6 +1,7 @@
 import pytest
 import allure
 from config.test_data import TestData
+from config.api_config import API_CONFIG
 
 @allure.feature("API Тесты Кинопоиска")
 class TestKinopoiskAPI:
@@ -107,4 +108,22 @@ class TestKinopoiskAPI:
                     allure.attach(
                 "Сезон без эпизодов",
                 name=f"Сезон {season['number']}"
-            )    
+            )  
+
+    @allure.story("API Кинопоиска")
+    @allure.title("Получение деталей фильма по ID, проверка статуса 200")
+    def test_get_film_details_status_code(self, api_client):
+        with allure.step("Выполняем запрос"):
+            response = api_client.session.get(
+                f"{api_client.base_url}/api/v2.2/films/{TestData.MOVIE_ID}",
+                headers={"X-API-KEY": API_CONFIG["api_key"]}
+            )
+    
+        with allure.step("Проверяем статус-код 200"):
+            assert response.status_code == 200, \
+               f"Ожидался 200, получен {response.status_code}"
+    
+        with allure.step("Проверяем тело ответа"):
+            data = response.json()
+            assert data["kinopoiskId"] == TestData.MOVIE_ID
+                   
